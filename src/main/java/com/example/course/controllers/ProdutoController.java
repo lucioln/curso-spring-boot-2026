@@ -2,11 +2,10 @@ package com.example.course.controllers;
 
 import com.example.course.models.Produto;
 import com.example.course.repositories.ProdutoRepository;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @RestController
@@ -27,4 +26,29 @@ public class ProdutoController {
         this.produtoRepository.save(produto);
         return produto;
     }
+
+    @GetMapping
+    public List<Produto> findAll() {
+        return this.produtoRepository.findAll();
+    }
+
+    @GetMapping("/{id}")
+    public Produto findById(@PathVariable String id){
+        return this.produtoRepository.findById(id).orElse(null);
+    }
+
+    @DeleteMapping
+    public Optional<Produto> deleteById(@RequestParam String id){
+        try{
+            Optional<Produto> produtoDeleted = this.produtoRepository.findById(id);
+            if(produtoDeleted.isPresent()){
+                this.produtoRepository.deleteById(id);
+                return produtoDeleted;
+            }
+        } catch (Exception e){
+            System.out.println("Erro ao deletar produto: " + e.getMessage());
+        }
+        return Optional.empty();
+    }
+    
 }

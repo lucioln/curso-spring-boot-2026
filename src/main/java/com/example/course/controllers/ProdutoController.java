@@ -32,9 +32,21 @@ public class ProdutoController {
         return this.produtoRepository.findAll();
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("{id}")
     public Produto findById(@PathVariable String id){
         return this.produtoRepository.findById(id).orElse(null);
+    }
+
+    @PutMapping("{id}")
+    public Produto update(@PathVariable String id, @RequestBody Produto produto){
+        Optional<Produto> result = this.produtoRepository.findById(id);
+        if (result.isPresent()) {
+            Produto existingProduto = result.get();
+            existingProduto.setNome(produto.getNome());
+            existingProduto.setPreco(produto.getPreco());
+            return this.produtoRepository.save(existingProduto);
+        }
+        return null;
     }
 
     @DeleteMapping
@@ -50,5 +62,4 @@ public class ProdutoController {
         }
         return Optional.empty();
     }
-    
 }

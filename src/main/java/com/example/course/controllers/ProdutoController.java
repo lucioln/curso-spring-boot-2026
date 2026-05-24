@@ -32,8 +32,8 @@ public class ProdutoController {
         return this.produtoRepository.findAll();
     }
 
-    @GetMapping("{id}")
-    public Produto findById(@PathVariable String id){
+    @GetMapping("/{id}")
+    public Produto findById(@RequestParam String id){
         return this.produtoRepository.findById(id).orElse(null);
     }
 
@@ -49,8 +49,8 @@ public class ProdutoController {
         return null;
     }
 
-    @DeleteMapping
-    public Optional<Produto> deleteById(@RequestParam String id){
+    @DeleteMapping("{id}")
+    public Optional<Produto> deleteById(@PathVariable String id){
         try{
             Optional<Produto> produtoDeleted = this.produtoRepository.findById(id);
             if(produtoDeleted.isPresent()){
